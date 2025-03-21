@@ -1,0 +1,73 @@
+node_modules/
+build/
+.expo/
+.expo-shared/
+
+# TypeScript build artifacts
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.production
+.env.development
+
+# macOS
+.DS_Store
+
+# VSCode settings
+.vscode/
+
+# Metro bundler cache
+metro-cache/
+
+# React Native packager cache
+__generated__/
+
+# Expo-specific files
+*.expo
+*.expo.dev
+
+# Jest test coverage
+coverage/
+
+# Firebase
+firebase-debug.log
+
+# Miscellaneous
+*.swp
+*.swo
+*.swn
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# Android
+android/.gradle
+android/app/build/
+android/app/release/
+android/.idea/
+android/.cxx/
+android/local.properties
+
+# iOS
+ios/Pods/
+ios/build/
+ios/.generated/
+ios/.expo-internal
+
+# Xcode
+xcuserdata/
+*.xcworkspace
+*.xcodeproj
+
+# Temporary files
+.tmp/
