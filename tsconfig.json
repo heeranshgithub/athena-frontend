@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -9,13 +8,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx",
-    "nativewind-env.d.ts"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "nativewind-env.d.ts"],
   "exclude": ["node_modules"],
   "extends": "expo/tsconfig.base"
 }
