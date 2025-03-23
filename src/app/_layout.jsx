@@ -2,10 +2,10 @@ import { Slot, useRouter, useSegments } from "expo-router";
 import { useEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import store from "../store/store";
-import { getUserToken, setUser } from "../store/slices/userSlice.ss";
+import { getUserToken, setUser } from "../store/slices/userSlice";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../../global.css"; // for nativewind
-import { secureStorage } from "../utils";
+import secureStorage from "../utils/secureStorage";
 
 // Auth wrapper component
 const AuthWrapper = () => {
@@ -15,7 +15,6 @@ const AuthWrapper = () => {
   const userToken = useSelector(getUserToken);
 
   useEffect(() => {
-    console.log("segments", segments);
     const inAuthGroup = segments[0] === "(auth)";
     const initializeAuth = async () => {
       //method setting user token and user id into user slice when the app opens

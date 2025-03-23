@@ -9,15 +9,22 @@ const STORAGE_KEYS = {
 const secureStorage = {
   saveUserToken: async (token: string): Promise<void> => {
     try {
-      await SecureStore.setItemAsync(STORAGE_KEYS.USER_TOKEN, token);
+      if (typeof token === "string") {
+        await SecureStore.setItemAsync(STORAGE_KEYS.USER_TOKEN, token);
+      } else {
+        SecureStore.deleteItemAsync(STORAGE_KEYS.USER_TOKEN);
+      }
     } catch (error) {
       console.error("Error saving user token:", error);
     }
   },
-
   saveUserName: async (name: string): Promise<void> => {
     try {
-      await SecureStore.setItemAsync(STORAGE_KEYS.USER_NAME, name);
+      if (typeof name === "string") {
+        await SecureStore.setItemAsync(STORAGE_KEYS.USER_NAME, name);
+      } else {
+        SecureStore.deleteItemAsync(STORAGE_KEYS.USER_NAME);
+      }
     } catch (error) {
       console.error("Error saving user name:", error);
     }
@@ -30,7 +37,6 @@ const secureStorage = {
       return null;
     }
   },
-
   getUserName: async (): Promise<string | null> => {
     try {
       return await SecureStore.getItemAsync(STORAGE_KEYS.USER_NAME);

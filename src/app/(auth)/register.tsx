@@ -76,7 +76,6 @@ const Register: React.FC = () => {
       );
       Alert.alert("Success", "User logged in successfully!");
     } catch (error) {
-      console.log(error);
       Alert.alert("Error", "Login failed. Please try again.");
     }
   };
