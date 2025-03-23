@@ -1,15 +1,15 @@
-import baseApiSlice from "./baseApiSlice";
+import baseApiSlice from './baseApiSlice'
 
 export const chatApiSlice = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    sendMessage: builder.mutation<string, string>({
+    sendMessage: builder.mutation<{ message: string }, string>({
       query: (message) => ({
-        url: "/chat",
-        method: "POST",
+        url: '/chat',
+        method: 'POST',
         body: { message },
       }),
     }),
   }),
-});
+})
 
-export const { useSendMessageMutation } = chatApiSlice;
+export const { useSendMessageMutation } = chatApiSlice
