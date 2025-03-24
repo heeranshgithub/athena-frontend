@@ -17,12 +17,15 @@ const AuthWrapper = () => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const [userToken, userName] = await Promise.all([
+        const [userToken, userName, userEmail] = await Promise.all([
           secureStorage.getUserToken(),
           secureStorage.getUserName(),
+          secureStorage.getUserEmail(),
         ]);
-        if (userToken && userName) {
-          dispatch(setUser({ name: userName, token: userToken }));
+        if (userToken && userName && userEmail) {
+          dispatch(
+            setUser({ name: userName, token: userToken, email: userEmail }),
+          );
         }
       } catch (error) {
         console.error("Error initializing auth:", error);

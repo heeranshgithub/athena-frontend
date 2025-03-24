@@ -57,6 +57,7 @@ const Register: React.FC = () => {
     try {
       const userData = { email, password };
       const res = await loginUser(userData).unwrap();
+
       dispatch(
         setUser({ token: res?.token, name: res?.name, email: res?.email }),
       );
