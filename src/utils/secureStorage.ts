@@ -5,6 +5,7 @@ const STORAGE_KEYS = {
   USER_TOKEN: "userToken",
   USER_NAME: "userName",
   USER_EMAIL: "userEmail",
+  TASKS: "tasks",
 };
 
 const secureStorage = {
@@ -13,7 +14,7 @@ const secureStorage = {
       if (typeof token === "string") {
         await SecureStore.setItemAsync(STORAGE_KEYS.USER_TOKEN, token);
       } else {
-        SecureStore.deleteItemAsync(STORAGE_KEYS.USER_TOKEN);
+        await SecureStore.deleteItemAsync(STORAGE_KEYS.USER_TOKEN);
       }
     } catch (error) {
       console.error("Error saving user token:", error);
@@ -24,7 +25,7 @@ const secureStorage = {
       if (typeof name === "string") {
         await SecureStore.setItemAsync(STORAGE_KEYS.USER_NAME, name);
       } else {
-        SecureStore.deleteItemAsync(STORAGE_KEYS.USER_NAME);
+        await SecureStore.deleteItemAsync(STORAGE_KEYS.USER_NAME);
       }
     } catch (error) {
       console.error("Error saving user name:", error);
@@ -35,7 +36,7 @@ const secureStorage = {
       if (typeof email === "string") {
         await SecureStore.setItemAsync(STORAGE_KEYS.USER_EMAIL, email);
       } else {
-        SecureStore.deleteItemAsync(STORAGE_KEYS.USER_EMAIL);
+        await SecureStore.deleteItemAsync(STORAGE_KEYS.USER_EMAIL);
       }
     } catch (error) {
       console.error("Error saving user email:", error);
@@ -72,6 +73,31 @@ const secureStorage = {
       await SecureStore.deleteItemAsync(STORAGE_KEYS.USER_EMAIL);
     } catch (error) {
       console.error("Error clearing user data:", error);
+    }
+  },
+
+  // Methods for handling tasks
+  saveTasks: async (tasks: any[]): Promise<void> => {
+    try {
+      await SecureStore.setItemAsync(STORAGE_KEYS.TASKS, JSON.stringify(tasks));
+    } catch (error) {
+      console.error("Error saving tasks:", error);
+    }
+  },
+  getTasks: async (): Promise<any[]> => {
+    try {
+      const tasks = await SecureStore.getItemAsync(STORAGE_KEYS.TASKS);
+      return tasks ? JSON.parse(tasks) : [];
+    } catch (error) {
+      console.error("Error getting tasks:", error);
+      return [];
+    }
+  },
+  clearTasks: async (): Promise<void> => {
+    try {
+      await SecureStore.deleteItemAsync(STORAGE_KEYS.TASKS);
+    } catch (error) {
+      console.error("Error clearing tasks:", error);
     }
   },
 };

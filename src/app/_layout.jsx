@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import store from "../store/store";
 import { getUserToken, setUser } from "../store/slices/userSlice";
+import { setTasks } from "../store/slices/tasksSlice";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../../global.css"; // for nativewind
 import secureStorage from "../utils/secureStorage";
@@ -17,15 +18,17 @@ const AuthWrapper = () => {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        const [userToken, userName, userEmail] = await Promise.all([
+        const [userToken, userName, userEmail, tasks] = await Promise.all([
           secureStorage.getUserToken(),
           secureStorage.getUserName(),
           secureStorage.getUserEmail(),
+          secureStorage.getTasks(),
         ]);
         if (userToken && userName && userEmail) {
           dispatch(
             setUser({ name: userName, token: userToken, email: userEmail }),
           );
+          if (tasks?.length > 0) dispatch(setTasks(tasks));
         }
       } catch (error) {
         console.error("Error initializing auth:", error);
