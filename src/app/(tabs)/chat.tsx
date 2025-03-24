@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSendMessageMutation } from "../../store/api/chatApiSlice";
+import { Ionicons } from "@expo/vector-icons";
 
 interface Message {
   text: string;
@@ -98,19 +99,28 @@ const Chat: React.FC = () => {
           )}
         </ScrollView>
 
-        <View className="flex-row p-4 bg-[#262626] pb-[${insets.bottom + 10}px]">
+        <View className="flex-row items-end p-4 bg-[#262626]">
           <TextInput
-            className="flex-1 bg-[#374151] p-3 rounded-lg text-white"
+            className="flex-1 bg-[#374151] p-2 rounded-lg text-white"
             value={inputText}
             onChangeText={setInputText}
             placeholder="Type a message..."
             placeholderTextColor="#a1a1aa"
+            multiline
+            scrollEnabled
+            style={{
+              maxHeight: 180, // Setting a limit
+              overflow: "hidden", // Prevent extra space when maxHeight is reached
+            }}
+            textAlignVertical="top"
           />
+
           <TouchableOpacity
-            className="bg-[#6366f1] p-3 rounded-lg ml-3"
+            className="bg-[#6366f1] p-3 rounded-lg ml-3 items-center justify-center"
             onPress={handleSendMessage}
+            style={{ height: 40, width: 40 }}
           >
-            <Text className="text-white">Send</Text>
+            <Ionicons name="send" size={20} color="white" />
           </TouchableOpacity>
         </View>
       </View>

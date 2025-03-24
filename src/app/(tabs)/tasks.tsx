@@ -12,17 +12,34 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+interface Task {
+  id: number;
+  title: string;
+  isCompleted: boolean;
+}
+
 const Tasks: React.FC = () => {
-  const [tasks, setTasks] = useState<string[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [task, setTask] = useState("");
   const insets = useSafeAreaInsets();
 
   const addTask = () => {
     if (task.trim()) {
-      setTasks([...tasks, task.trim()]);
+      setTasks([
+        ...tasks,
+        { id: tasks.length + 1, title: task.trim(), isCompleted: false },
+      ]);
       setTask("");
       Keyboard.dismiss();
     }
+  };
+
+  const toggleTaskCompletion = (id: number) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, isCompleted: !task.isCompleted } : task,
+      ),
+    );
   };
 
   return (
@@ -55,12 +72,27 @@ const Tasks: React.FC = () => {
 
         <FlatList
           data={tasks}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id?.toString()}
           contentContainerClassName="p-4"
           renderItem={({ item }) => (
-            <View className="bg-[#1f2937] p-3 rounded-lg mb-2 mx-4">
-              <Text className="text-white">{item}</Text>
-            </View>
+            <TouchableOpacity
+              onPress={() => toggleTaskCompletion(item.id)}
+              className="flex-row items-center bg-[#1f2937] p-3 rounded-lg mb-2 mx-4"
+            >
+              <FontAwesome
+                name={item.isCompleted ? "check-circle" : "circle-o"}
+                size={24}
+                color={item.isCompleted ? "#10B981" : "#a1a1aa"}
+                className="mr-3"
+              />
+              <Text
+                className={`text-white ${
+                  item.isCompleted ? "line-through text-gray-400" : ""
+                }`}
+              >
+                {item.id ? `${item.id}. ${item.title}` : item.title}
+              </Text>
+            </TouchableOpacity>
           )}
         />
       </View>
