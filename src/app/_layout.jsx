@@ -13,7 +13,6 @@ const AuthWrapper = () => {
   const segments = useSegments();
   const dispatch = useDispatch();
   const userToken = useSelector(getUserToken);
-  console.log(userToken);
 
   useEffect(() => {
     const initializeAuth = async () => {

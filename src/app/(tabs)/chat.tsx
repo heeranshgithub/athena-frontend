@@ -12,8 +12,6 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSendMessageMutation } from "../../store/api/chatApiSlice";
-import { useDispatch } from "react-redux";
-import { MaterialIcons } from "@expo/vector-icons";
 
 interface Message {
   text: string;
@@ -26,7 +24,6 @@ const Chat: React.FC = () => {
   const [inputText, setInputText] = useState("");
   const scrollViewRef = useRef<ScrollView>(null);
   const insets = useSafeAreaInsets();
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if (scrollViewRef.current) {
@@ -69,15 +66,9 @@ const Chat: React.FC = () => {
       className="flex-1 bg-[#121212]"
     >
       <View className="flex-1" style={{ paddingTop: insets.top }}>
-        {/* <View className="items-center py-4 bg-[#1f2937] border-b border-[#374151] flex-row justify-center">
-          <MaterialIcons
-            name="chat"
-            size={24}
-            color="white"
-            style={{ marginRight: 8 }}
-          />
+        <View className="px-6">
           <Text className="text-white text-2xl font-bold">Chat</Text>
-        </View> */}
+        </View>
 
         <ScrollView
           ref={scrollViewRef}
