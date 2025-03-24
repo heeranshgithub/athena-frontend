@@ -7,7 +7,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import "../../global.css"; // for nativewind
 import secureStorage from "../utils/secureStorage";
 
-// Auth wrapper component
+// Separate component for auth logic
 const AuthWrapper = () => {
   const router = useRouter();
   const segments = useSegments();
@@ -15,33 +15,34 @@ const AuthWrapper = () => {
   const userToken = useSelector(getUserToken);
 
   useEffect(() => {
-    const inAuthGroup = segments[0] === "(auth)";
     const initializeAuth = async () => {
-      //method setting user token and user id into user slice when the app opens
       try {
         const [userToken, userName] = await Promise.all([
           secureStorage.getUserToken(),
           secureStorage.getUserName(),
         ]);
-        if (userToken && userName)
+        if (userToken && userName) {
           dispatch(setUser({ name: userName, token: userToken }));
+        }
       } catch (error) {
         console.error("Error initializing auth:", error);
       }
     };
+
     if (!userToken) initializeAuth();
-    if (!userToken && !inAuthGroup) {
-      // Redirect to register if no token and not already in auth group
+
+    const onAuthScreen = segments[0] === "register";
+    if (!userToken && !onAuthScreen) {
       router.replace("/register");
-    } else if (userToken && inAuthGroup) {
-      // Redirect to chat screen if has token but is still in auth group
+    } else if (userToken && onAuthScreen) {
       router.replace("/chat");
     }
   }, [userToken, segments]);
 
-  return <Slot />;
+  return <Slot />; // This loads either (tabs)/_layout.tsx or register.tsx
 };
 
+// Root component that provides context
 const RootLayout = () => {
   return (
     <Provider store={store}>

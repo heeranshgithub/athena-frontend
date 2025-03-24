@@ -12,8 +12,8 @@ import { useDispatch } from "react-redux";
 import {
   useRegisterUserMutation,
   useLoginUserMutation,
-} from "../../store/api/userApiSlice";
-import { setUser } from "../../store/slices/userSlice";
+} from "../store/api/userApiSlice";
+import { setUser } from "../store/slices/userSlice";
 import * as React from "react";
 
 const Register: React.FC = () => {

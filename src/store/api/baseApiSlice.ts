@@ -10,8 +10,8 @@ const baseApiSlice = createApi({
   baseQuery: fetchBaseQuery({
     // baseUrl: currBaseSimURL,
     // baseUrl: currBase_HP_IP_URl,
-    baseUrl: currBase_HP_Home_IP_URl,
-    // baseUrl: currBase_HP_BH_IP_URl,
+    // baseUrl: currBase_HP_Home_IP_URl,
+    baseUrl: currBase_HP_BH_IP_URl,
     prepareHeaders: async (headers, { getState }) => {
       headers.set("Content-Type", "application/json");
       const token = (getState() as RootState)?.user?.token;
