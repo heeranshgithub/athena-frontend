@@ -51,10 +51,9 @@ const Register: React.FC = () => {
         setUser({
           token: res?.token,
           name: res?.name,
+          email: res?.email,
         }),
       );
-
-      Alert.alert("Success", "User registered successfully!");
     } catch (error) {
       Alert.alert("Error", "Registration failed. Please try again.");
     }
@@ -68,13 +67,14 @@ const Register: React.FC = () => {
     try {
       const userData = { email, password };
       const res = await loginUser(userData).unwrap();
+      console.log(res);
       dispatch(
         setUser({
           token: res?.token,
           name: res?.name,
+          email: res?.email,
         }),
       );
-      Alert.alert("Success", "User logged in successfully!");
     } catch (error) {
       Alert.alert("Error", "Login failed. Please try again.");
     }

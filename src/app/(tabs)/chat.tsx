@@ -12,16 +12,16 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSendMessageMutation } from "../../store/api/chatApiSlice";
-import { clearUser } from "../../store/slices/userSlice";
 import { useDispatch } from "react-redux";
+import { MaterialIcons } from "@expo/vector-icons";
 
 interface Message {
   text: string;
   isUser: boolean;
-  opacity?: Animated.Value; // Add opacity for animation
+  opacity?: Animated.Value;
 }
 
-const chat: React.FC = () => {
+const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
   const scrollViewRef = useRef<ScrollView>(null);
@@ -46,8 +46,7 @@ const chat: React.FC = () => {
 
       try {
         const response = await sendMessage(inputText).unwrap();
-
-        const initialOpacity = new Animated.Value(0); // Initialize opacity to 0
+        const initialOpacity = new Animated.Value(0);
         setMessages((prevMessages) => [
           ...prevMessages,
           { text: response?.message, isUser: false, opacity: initialOpacity },
@@ -55,8 +54,8 @@ const chat: React.FC = () => {
 
         Animated.timing(initialOpacity, {
           toValue: 1,
-          duration: 500, // Animation duration
-          useNativeDriver: true, // Improve performance
+          duration: 500,
+          useNativeDriver: true,
         }).start();
       } catch (error) {
         console.error("Error sending message:", error);
@@ -64,95 +63,63 @@ const chat: React.FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    dispatch(clearUser());
-  };
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{ flex: 1, backgroundColor: "#121212" }}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+      className="flex-1 bg-[#121212]"
     >
-      <View style={{ flex: 1, paddingTop: insets.top }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            padding: 10,
-          }}
-        >
-          <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>
-            Chat
-          </Text>
-          <TouchableOpacity
-            onPress={handleLogout}
-            style={{ backgroundColor: "#8b0000", padding: 10, borderRadius: 8 }}
-          >
-            <Text style={{ color: "white" }}>Logout</Text>
-          </TouchableOpacity>
-        </View>
+      <View className="flex-1" style={{ paddingTop: insets.top }}>
+        {/* <View className="items-center py-4 bg-[#1f2937] border-b border-[#374151] flex-row justify-center">
+          <MaterialIcons
+            name="chat"
+            size={24}
+            color="white"
+            style={{ marginRight: 8 }}
+          />
+          <Text className="text-white text-2xl font-bold">Chat</Text>
+        </View> */}
 
         <ScrollView
           ref={scrollViewRef}
-          contentContainerStyle={{ flexGrow: 1, padding: 10 }}
+          contentContainerClassName="flex-grow p-4"
         >
           {messages.map((message, index) => (
-            <Animated.View //Wrap the message view with animated view.
+            <Animated.View
               key={index}
+              className={`self-${message.isUser ? "end" : "start"} bg-${
+                message.isUser ? "[#374151]" : "[#1f2937]"
+              } p-3 rounded-lg mb-2 max-w-[80%]`}
               style={{
+                opacity: message.opacity || 1,
                 alignSelf: message.isUser ? "flex-end" : "flex-start",
-                backgroundColor: message.isUser ? "#374151" : "#1f2937",
-                padding: 10,
-                borderRadius: 8,
-                marginBottom: 8,
-                maxWidth: "80%",
-                opacity: message.opacity || 1, // Apply opacity if available
               }}
             >
-              <Text style={{ color: "white" }}>{message.text}</Text>
+              <Text className="text-white">{message.text}</Text>
             </Animated.View>
           ))}
-          {/* Loading indicator */}
+
           {isLoading && (
             <ActivityIndicator
               size="small"
               color="#6366f1"
-              style={{ alignSelf: "center", marginTop: 10 }}
+              className="self-center mt-2"
             />
           )}
         </ScrollView>
-        <View
-          style={{
-            flexDirection: "row",
-            padding: 10,
-            backgroundColor: "#262626",
-            paddingBottom: insets.bottom + 10,
-          }}
-        >
+
+        <View className="flex-row p-4 bg-[#262626] pb-[${insets.bottom + 10}px]">
           <TextInput
-            style={{
-              flex: 1,
-              backgroundColor: "#374151",
-              padding: 10,
-              borderRadius: 8,
-              color: "white",
-            }}
+            className="flex-1 bg-[#374151] p-3 rounded-lg text-white"
             value={inputText}
             onChangeText={setInputText}
             placeholder="Type a message..."
             placeholderTextColor="#a1a1aa"
           />
           <TouchableOpacity
-            style={{
-              backgroundColor: "#6366f1",
-              padding: 10,
-              borderRadius: 8,
-              marginLeft: 8,
-            }}
+            className="bg-[#6366f1] p-3 rounded-lg ml-3"
             onPress={handleSendMessage}
           >
-            <Text style={{ color: "white" }}>Send</Text>
+            <Text className="text-white">Send</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -160,4 +127,4 @@ const chat: React.FC = () => {
   );
 };
 
-export default chat;
+export default Chat;
