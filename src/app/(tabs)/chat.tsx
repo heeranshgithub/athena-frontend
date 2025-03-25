@@ -13,7 +13,8 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSendMessageMutation } from "../../store/api/chatApiSlice";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useDispatch } from "react-redux";
+import { setTasks } from "../../store/slices/tasksSlice";
 interface Message {
   text: string;
   isUser: boolean;
@@ -25,6 +26,7 @@ const Chat: React.FC = () => {
   const [inputText, setInputText] = useState("");
   const scrollViewRef = useRef<ScrollView>(null);
   const insets = useSafeAreaInsets();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (scrollViewRef.current) {
@@ -44,10 +46,16 @@ const Chat: React.FC = () => {
 
       try {
         const response = await sendMessage(inputText).unwrap();
+        dispatch(setTasks(response));
+
         const initialOpacity = new Animated.Value(0);
         setMessages((prevMessages) => [
           ...prevMessages,
-          { text: response?.message, isUser: false, opacity: initialOpacity },
+          {
+            text: "Your tasks screen has been updated!",
+            isUser: false,
+            opacity: initialOpacity,
+          },
         ]);
 
         Animated.timing(initialOpacity, {
@@ -56,6 +64,13 @@ const Chat: React.FC = () => {
           useNativeDriver: true,
         }).start();
       } catch (error) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            text: "Error occurred. Please try again later.",
+            isUser: false,
+          },
+        ]);
         console.error("Error sending message:", error);
       }
     }

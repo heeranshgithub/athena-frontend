@@ -1,11 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import secureStorage from "../../utils/secureStorage";
-
-interface Task {
-  id: number;
-  task: string;
-  isCompleted: boolean;
-}
+import { Task } from "../../interfaces/taskInterfaces";
 
 interface TasksState {
   tasks: Task[];

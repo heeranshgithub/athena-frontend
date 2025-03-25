@@ -11,35 +11,29 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
-interface Task {
-  id: number;
-  title: string;
-  isCompleted: boolean;
-}
+import {
+  addTask,
+  getTasks,
+  toggleTaskCompletion,
+} from "../../store/slices/tasksSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Tasks: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [task, setTask] = useState("");
+  const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
+  const tasks = useSelector(getTasks);
 
-  const addTask = () => {
+  const handleAddTask = () => {
     if (task.trim()) {
-      setTasks([
-        ...tasks,
-        { id: tasks.length + 1, title: task.trim(), isCompleted: false },
-      ]);
+      dispatch(addTask({ id: tasks.length + 1, task: task.trim() }));
       setTask("");
       Keyboard.dismiss();
     }
   };
 
-  const toggleTaskCompletion = (id: number) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, isCompleted: !task.isCompleted } : task,
-      ),
-    );
+  const handleToggleTask = (id: number) => {
+    dispatch(toggleTaskCompletion(id));
   };
 
   return (
@@ -59,11 +53,11 @@ const Tasks: React.FC = () => {
             placeholderTextColor="#a1a1aa"
             value={task}
             onChangeText={setTask}
-            onSubmitEditing={addTask}
+            onSubmitEditing={handleAddTask}
             returnKeyType="done"
           />
           <TouchableOpacity
-            onPress={addTask}
+            onPress={handleAddTask}
             className="ml-3 p-3 bg-[#6366f1] rounded-lg"
           >
             <FontAwesome name="plus" size={24} color="white" />
@@ -76,7 +70,7 @@ const Tasks: React.FC = () => {
           contentContainerClassName="p-4"
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={() => toggleTaskCompletion(item.id)}
+              onPress={() => handleToggleTask(item.id)}
               className="flex-row items-center bg-[#1f2937] p-3 rounded-lg mb-2 mx-4"
             >
               <FontAwesome
@@ -90,7 +84,7 @@ const Tasks: React.FC = () => {
                   item.isCompleted ? "line-through text-gray-400" : ""
                 }`}
               >
-                {item.id ? `${item.id}. ${item.title}` : item.title}
+                {item.id ? `${item.id}. ${item.task}` : item.task}
               </Text>
             </TouchableOpacity>
           )}
