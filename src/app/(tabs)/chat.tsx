@@ -9,12 +9,14 @@ import {
   Platform,
   ActivityIndicator,
   Animated,
+  Keyboard,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSendMessageMutation } from "../../store/api/chatApiSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { setTasks } from "../../store/slices/tasksSlice";
+import { Task } from "../../interfaces/taskInterfaces";
 interface Message {
   text: string;
   isUser: boolean;
@@ -46,7 +48,7 @@ const Chat: React.FC = () => {
 
       try {
         const response = await sendMessage(inputText).unwrap();
-        dispatch(setTasks(response));
+        dispatch(setTasks(response.message));
 
         const initialOpacity = new Animated.Value(0);
         setMessages((prevMessages) => [
@@ -72,6 +74,8 @@ const Chat: React.FC = () => {
           },
         ]);
         console.error("Error sending message:", error);
+      } finally {
+        Keyboard.dismiss();
       }
     }
   };

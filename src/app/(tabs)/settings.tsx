@@ -8,6 +8,7 @@ import {
   getUserName,
 } from "../../store/slices/userSlice";
 import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { clearTasks } from "../../store/slices/tasksSlice";
 
 const SettingsScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -15,7 +16,8 @@ const SettingsScreen: React.FC = () => {
   const userEmail = useSelector(getUserEmail);
   const userName = useSelector(getUserName);
   const handleLogout = () => {
-    dispatch(clearUser());
+    dispatch(clearUser());    
+    dispatch(clearTasks());
   };
 
   return (

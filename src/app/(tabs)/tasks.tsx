@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Text,
   TextInput,
@@ -15,6 +15,7 @@ import {
   addTask,
   getTasks,
   toggleTaskCompletion,
+  clearTasks,
 } from "../../store/slices/tasksSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -26,7 +27,7 @@ const Tasks: React.FC = () => {
 
   const handleAddTask = () => {
     if (task.trim()) {
-      dispatch(addTask({ id: tasks.length + 1, task: task.trim() }));
+      dispatch(addTask({ id: tasks.length + 1, title: task.trim() }));
       setTask("");
       Keyboard.dismiss();
     }
@@ -36,14 +37,26 @@ const Tasks: React.FC = () => {
     dispatch(toggleTaskCompletion(id));
   };
 
+  const handleClearTasks = () => {
+    dispatch(clearTasks());
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 bg-[#121212]"
     >
       <View className="flex-1" style={{ paddingTop: insets.top }}>
-        <View className="px-6">
+        <View className="px-6 flex-row justify-between items-center">
           <Text className="text-white text-2xl font-bold">Tasks</Text>
+          {tasks.length > 0 && (
+            <TouchableOpacity
+              onPress={handleClearTasks}
+              className="p-2 bg-red-500 rounded-lg"
+            >
+              <Text className="text-white font-semibold">Clear</Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         <View className="flex-row items-center bg-[#262626] rounded-lg p-3 mx-4 mt-4">
@@ -64,31 +77,37 @@ const Tasks: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        <FlatList
-          data={tasks}
-          keyExtractor={(item) => item.id?.toString()}
-          contentContainerClassName="p-4"
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() => handleToggleTask(item.id)}
-              className="flex-row items-center bg-[#1f2937] p-3 rounded-lg mb-2 mx-4"
-            >
-              <FontAwesome
-                name={item.isCompleted ? "check-circle" : "circle-o"}
-                size={24}
-                color={item.isCompleted ? "#10B981" : "#a1a1aa"}
-                className="mr-3"
-              />
-              <Text
-                className={`text-white ${
-                  item.isCompleted ? "line-through text-gray-400" : ""
-                }`}
+        {tasks.length > 0 ? (
+          <FlatList
+            data={tasks}
+            keyExtractor={(item) => item.id?.toString()}
+            contentContainerClassName="p-4"
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                onPress={() => handleToggleTask(item.id)}
+                className="flex-row items-center bg-[#1f2937] p-3 rounded-lg mb-2 mx-4"
               >
-                {item.id ? `${item.id}. ${item.task}` : item.task}
-              </Text>
-            </TouchableOpacity>
-          )}
-        />
+                <FontAwesome
+                  name={item.isCompleted ? "check-circle" : "circle-o"}
+                  size={24}
+                  color={item.isCompleted ? "#10B981" : "#a1a1aa"}
+                  className="mr-3"
+                />
+                <Text
+                  className={`text-white ${
+                    item.isCompleted ? "line-through text-gray-400" : ""
+                  }`}
+                >
+                  {item.id ? `${item.id}. ${item.title}` : item.title}
+                </Text>
+              </TouchableOpacity>
+            )}
+          />
+        ) : (
+          <Text className="text-white text-center text-lg mt-4">
+            No tasks found
+          </Text>
+        )}
       </View>
     </KeyboardAvoidingView>
   );

@@ -14,7 +14,7 @@ const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    addTask: (state, action: PayloadAction<{ id: number; task: string }>) => {
+    addTask: (state, action: PayloadAction<{ id: number; title: string }>) => {
       state.tasks.push({ ...action.payload, isCompleted: false });
       secureStorage.saveTasks(state.tasks);
     },
