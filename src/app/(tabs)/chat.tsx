@@ -128,8 +128,8 @@ const Chat: React.FC = () => {
             multiline
             scrollEnabled
             style={{
-              maxHeight: 180, // Setting a limit
-              overflow: "hidden", // Prevent extra space when maxHeight is reached
+              maxHeight: 180,
+              overflow: "hidden",
             }}
             textAlignVertical="top"
           />

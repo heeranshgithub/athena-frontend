@@ -52,9 +52,9 @@ const Tasks: React.FC = () => {
           {tasks.length > 0 && (
             <TouchableOpacity
               onPress={handleClearTasks}
-              className="p-2 bg-red-500 rounded-lg"
+              className="px-4 py-2 bg-[#b91c1c] rounded-full active:bg-[#991b1b] transition-all"
             >
-              <Text className="text-white font-semibold">Clear</Text>
+              <Text className="text-white font-semibold text-sm">Clear All</Text>
             </TouchableOpacity>
           )}
         </View>
